@@ -2,9 +2,11 @@ from sqlalchemy.orm import Session
 
 from models import dog as dog_model
 from schema import dog as dog_schema
+from services import dog_picture_service as picture_service
 
 def create_dog(db: Session, dog: dog_schema.DogCreate):
-    db_dog = dog_model.Dog(name=dog.name, picture = dog.picture, create_date = dog.create_date, is_adopted = dog.is_adopted )
+    url_dog = picture_service.get_picture_url()
+    db_dog = dog_model.Dog(name=dog.name, picture = url_dog, create_date = dog.create_date, is_adopted = dog.is_adopted )
     db.add(db_dog)
     db.commit()
     db.refresh(db_dog)
