@@ -5,6 +5,7 @@ from database.database import SessionLocal, engine
 from models import dog as dog_model
 from schema import dog as dog_schema
 from crud import dog as dog_crud
+from pydantic import BaseModel
 
 dog_model.Base.metadata.create_all(bind=engine)
 router = APIRouter()
@@ -31,7 +32,7 @@ async def get_dogs(db: Session = Depends(get_db)):
 
 @router.get("/dogs/{id}",tags=["Dogs"], response_model=dog_schema.Dog)
 async def get_dog(id,db: Session = Depends(get_db)):
-    dogs = dog_crud.get_dog(db, id)
+    dogs = dog_crud.get_dog_by_id(db, id)
     return dogs
 
 @router.get("/dogs/{id}",tags=["Dogs"], response_model=dog_schema.Dog)
@@ -42,4 +43,10 @@ async def get_dog(id,db: Session = Depends(get_db)):
 @router.get("/dogs/adopted",tags=["Dogs"], response_model=List[dog_schema.Dog])
 async def get_dogs(db: Session = Depends(get_db)):
     dogs = dog_crud.get_dogs_adopted(db)
+    return dogs
+
+@router.put("/dogs/{id}/",tags=["Dogs"], response_model=dog_schema.Dog)
+async def get_dog( dog:dog_schema.Dog, id,db: Session = Depends(get_db)):
+    print (dog)
+    dogs = dog_crud.update_dog_by_id(db, id,dog)
     return dogs
