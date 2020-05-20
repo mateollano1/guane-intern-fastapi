@@ -39,3 +39,15 @@ def delete_dog_by_id(db: Session, id):
     db.commit()
     return
     
+def delete_dog_by_id(db: Session, id):
+    dog = db.query(dog_model.Dog).filter(dog_model.Dog.id== id).first()
+    db.delete(dog)
+    db.commit()
+    return
+
+def delete_dog_by_name(db: Session, name):
+    dog = db.query(dog_model.Dog).filter(dog_model.Dog.name== name).first()
+    db.delete(dog)
+    db.commit()
+    return
+    
