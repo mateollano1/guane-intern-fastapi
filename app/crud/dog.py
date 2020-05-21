@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from models import dog as dog_model
-from schema import dog as dog_schema
-from services import dog_picture_service as picture_service
+from app.models import dog as dog_model
+from app.schema import dog as dog_schema
+from app.services import dog_picture_service as picture_service
 
 def create_dog(db: Session, dog: dog_schema.DogCreate):
     url_dog = picture_service.get_picture_url()

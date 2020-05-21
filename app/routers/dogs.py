@@ -1,10 +1,10 @@
 from typing import List
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, FastAPI, HTTPException
-from database.database import SessionLocal, engine
-from models import dog as dog_model
-from schema import dog as dog_schema
-from crud import dog as dog_crud
+from app.database.database import SessionLocal, engine
+from app.models import dog as dog_model
+from app.schema import dog as dog_schema
+from app.crud import dog as dog_crud
 from pydantic import BaseModel
 
 dog_model.Base.metadata.create_all(bind=engine)

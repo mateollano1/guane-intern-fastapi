@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import dogs
+from app.routers import dogs
 
 app = FastAPI()
 
