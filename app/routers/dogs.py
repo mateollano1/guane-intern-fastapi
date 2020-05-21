@@ -40,7 +40,7 @@ async def get_dog(id: str = "", name: str = "",db: Session = Depends(get_db)):
         return dogs
     return
 
-@router.get("/dogs/adopted",tags=["Dogs"], response_model=List[dog_schema.Dog])
+@router.get("/dogs/is_adopted",tags=["Dogs"], response_model=List[dog_schema.Dog])
 async def get_dogs(db: Session = Depends(get_db)):
     dogs = dog_crud.get_dogs_adopted(db)
     return dogs

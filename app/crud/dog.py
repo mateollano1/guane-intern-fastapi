@@ -22,7 +22,7 @@ def get_dog_by_name(db: Session, name):
     return db.query(dog_model.Dog).filter(dog_model.Dog.name == name).first()
 
 def get_dogs_adopted(db: Session):
-    return db.query(dog_model.Dog).filter(dog_model.Dog.is_adopted == False).all()
+    return db.query(dog_model.Dog).filter(dog_model.Dog.is_adopted == True).all()
 
 def update_dog_by_id(db: Session, id, dog: dog_schema.DogCreate):
     dog_found = db.query(dog_model.Dog).filter(dog_model.Dog.id == id).first()
