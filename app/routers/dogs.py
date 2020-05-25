@@ -1,11 +1,12 @@
 from typing import List
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, FastAPI, HTTPException
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, BackgroundTasks
 from app.database.database import SessionLocal, engine
 from app.models import dog as dog_model
 from app.schema import dog as dog_schema
 from app.crud import dog as dog_crud
 from pydantic import BaseModel
+from app.workers.celery_app import celery_app
 
 dog_model.Base.metadata.create_all(bind=engine)
 router = APIRouter()
@@ -17,12 +18,17 @@ def get_db():
         yield db
     finally:
         db.close()
+def celery_on_message(body):
+    print(body)
 
+def background_on_message(task):
+    print(task.get(on_message=celery_on_message, propagate=False))
 
-@router.post("/dogs/{name}",tags=["Dogs"], response_model=dog_schema.Dog)
+@router.post("/dogs/{name}",tags=["Dogs"])
 def create_dog(name: str,db: Session = Depends(get_db)):
-    dog = dog_schema.DogBase(name= name, picture = "") 
-    return dog_crud.create_dog(db, dog)
+    task = celery_app.send_task(
+        "app.workers.post_worker.create_dog", args=[name])
+    return {"message": "dog information received"}
 
 
 @router.get("/dogs",tags=["Dogs"],response_model=List[dog_schema.Dog])
